@@ -1,6 +1,6 @@
 <?php
 
-function bubbleSort($arr)
+function bubbleSort($arr = null)
 {
     $checked = false;
 
@@ -22,5 +22,8 @@ function bubbleSort($arr)
 
     return $arr;
 }
-
-echo implode("", bubbleSort(file('php://stdin')));
+$filename = 'php://stdin';
+if (strpos($argv[1], 'txt')) {
+    $filename = $argv[1];
+}
+echo implode("", bubbleSort(file($filename)));
