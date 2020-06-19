@@ -15,6 +15,10 @@ function bubbleSort($arr, $funcCallback)
 
     for ($i = 1; $i < count($arr); $i++) {
         for ($j = 0; $j < count($arr)-$i; $j++) {
+            if (strlen($arr[$j]) <= 1)  {
+                unset($arr[$j]);
+                continue;
+            }
             if ($funcCallback($arr[$j+1], $arr[$j])) {
                 $tempVal = $arr[$j];
                 $arr[$j] = $arr[$j+1];
@@ -34,7 +38,7 @@ function bubbleSort($arr, $funcCallback)
 $filename = 'php://stdin';
 $funcCallback = 'checkAsStrings';
 $optind = null;
-$options = getopt('n', [], $optind);
+$options = getopt('no:filename', [], $optind);
 
 if ($argv[$optind]) {
     $filename = $argv[$optind];
@@ -42,6 +46,11 @@ if ($argv[$optind]) {
 
 if(array_key_exists('n',$options)) {
     $funcCallback = 'checkAsInt';
+}
+
+if ($options['o']) {
+   file_put_contents($options['o'], bubbleSort(file($filename), $funcCallback));
+   echo 'The following output is also saved in ' . $options['o'] . " file\n";
 }
 
 echo implode("", bubbleSort(file($filename), $funcCallback));
